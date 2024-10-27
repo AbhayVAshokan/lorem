@@ -8,6 +8,7 @@ import {
 import type { LinksFunction } from "@remix-run/node";
 
 import "./tailwind.css";
+import { Toaster } from "sonner";
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -33,12 +34,23 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
+        {/* TODO: Enable this back */}
+        {/* <Copyright /> */}
+        <Toaster />
         <ScrollRestoration />
         <Scripts />
       </body>
     </html>
   );
 }
+
+const Copyright = () => (
+  <div className="z-20 w-full fixed bottom-0">
+    <p className="text-xs text-center mt-4 py-4">
+      Made with ❤️ and caffeine by Abhay V Ashokan
+    </p>
+  </div>
+);
 
 export default function App() {
   return <Outlet />;
