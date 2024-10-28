@@ -24,7 +24,7 @@ export const meta: MetaFunction = () => {
       content:
         "Generate lorem ipsum text for your website by specifying the number of paragraphs.",
     },
-    { property: "og:image", content: "TODO: Add the image here" },
+    { property: "og:image", content: "https://lorem.abhay.app/cover.png" },
     { property: "twitter:title", content: "Lorem ipsum generator" },
     {
       property: "twitter:description",
@@ -33,7 +33,7 @@ export const meta: MetaFunction = () => {
     },
     { property: "twitter:creator:id", content: "@abhayvashokan" },
     { property: "twitter:site", content: "@abhayvashokan" },
-    { property: "twitter:image", content: "TODO: Add the image here" },
+    { property: "twitter:image", content: "https://lorem.abhay.app/cover.png" },
     { property: "twitter:card", content: "summary_large_image" },
   ];
 };
