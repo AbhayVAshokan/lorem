@@ -1,3 +1,4 @@
+// TODO: Update the favicon.
 // TODO: Copy the content by default.
 import type {
   ActionFunctionArgs,
@@ -7,6 +8,7 @@ import type {
 import { Form, json, useLoaderData } from "@remix-run/react";
 import { useEffect } from "react";
 import { toast } from "sonner";
+import Button from "~/components/button";
 
 // TODO: Update the meta information.
 export const meta: MetaFunction = () => {
@@ -73,7 +75,7 @@ const Index = () => {
         <h1> Lorem Ipsum generator</h1>
       </header>
 
-      <section className="max-w-4xl mx-auto flex flex-col h-full justify-center h-[calc(100%-5rem)]">
+      <section className="max-w-4xl mx-auto flex flex-col justify-center h-[calc(100%-5rem)]">
         <div className="space-y-6 bg-zinc-100 dark:bg-zinc-900 p-8 pt-16 rounded-md relative overflow-auto">
           <div className="flex absolute top-8 left-0 px-8 justify-between w-full">
             <Form method="POST" className="flex justify-between">
@@ -88,14 +90,12 @@ const Index = () => {
                   max={99}
                   className="p-2 w-20 text-center text-sm rounded-md"
                 />
-                <button className="bg-white dark:bg-black rounded-lg py-2 px-4 text-sm">
-                  Generate
-                </button>
+                <Button style="primary">Generate</Button>
               </div>
             </Form>
-            <button className="text-sm" onClick={handleCopy}>
+            <Button style="secondary" onClick={handleCopy}>
               Copy
-            </button>
+            </Button>
           </div>
 
           {paragraphs.map((paragraph, index) => (
