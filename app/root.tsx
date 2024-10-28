@@ -42,14 +42,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-const Copyright = () => (
-  <div className="z-20 w-full fixed bottom-0">
-    <p className="text-xs text-center mt-4 py-4">
-      Made with ❤️ and caffeine by Abhay V Ashokan
-    </p>
-  </div>
-);
-
 export default function App() {
   return <Outlet />;
 }

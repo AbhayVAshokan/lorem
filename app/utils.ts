@@ -220,7 +220,8 @@ const generateParagraph = () => {
 export const generateLoremIpsum = (n: number) => {
   let result = [DEFAULT_PARAGRAPH];
 
-  if (n === 1) return result;
+  if (n <= 1) return result;
+  if (n > 99) n = 99;
 
   while (--n) result.push(generateParagraph());
 

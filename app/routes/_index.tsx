@@ -3,10 +3,11 @@ import type {
   LoaderFunctionArgs,
   MetaFunction,
 } from "@remix-run/node";
-import { Form, json, useLoaderData } from "@remix-run/react";
-import { useEffect } from "react";
+import { Form, json, useLoaderData, useNavigation } from "@remix-run/react";
+import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 import Button from "~/components/button";
+import { generateLoremIpsum } from "~/utils";
 
 export const meta: MetaFunction = () => {
   return [
@@ -37,54 +38,33 @@ export const meta: MetaFunction = () => {
   ];
 };
 
-const DEFAULT_PARAGRAPHS = [
-  "Lorem ipsum odor amet, consectetuer adipiscing elit. Fermentum nulla ad semper finibus bibendum. Volutpat ultricies metus per massa lobortis massa magna risus. Quisque pellentesque tincidunt malesuada; metus viverra tellus. Dignissim euismod dui tortor tortor nostra euismod ac nisi. Elit nisl gravida eget sollicitudin arcu ex. Arcu tortor tempus potenti rhoncus sollicitudin porttitor justo.",
-  "Lorem ipsum odor amet, consectetuer adipiscing elit. Fermentum nulla ad semper finibus bibendum. Volutpat ultricies metus per massa lobortis massa magna risus. Quisque pellentesque tincidunt malesuada; metus viverra tellus. Dignissim euismod dui tortor tortor nostra euismod ac nisi. Elit nisl gravida eget sollicitudin arcu ex. Arcu tortor tempus potenti rhoncus sollicitudin porttitor justo.",
-  "Lorem ipsum odor amet, consectetuer adipiscing elit. Fermentum nulla ad semper finibus bibendum. Volutpat ultricies metus per massa lobortis massa magna risus. Quisque pellentesque tincidunt malesuada; metus viverra tellus. Dignissim euismod dui tortor tortor nostra euismod ac nisi. Elit nisl gravida eget sollicitudin arcu ex. Arcu tortor tempus potenti rhoncus sollicitudin porttitor justo.",
-  "Lorem ipsum odor amet, consectetuer adipiscing elit. Fermentum nulla ad semper finibus bibendum. Volutpat ultricies metus per massa lobortis massa magna risus. Quisque pellentesque tincidunt malesuada; metus viverra tellus. Dignissim euismod dui tortor tortor nostra euismod ac nisi. Elit nisl gravida eget sollicitudin arcu ex. Arcu tortor tempus potenti rhoncus sollicitudin porttitor justo.",
-  "Lorem ipsum odor amet, consectetuer adipiscing elit. Fermentum nulla ad semper finibus bibendum. Volutpat ultricies metus per massa lobortis massa magna risus. Quisque pellentesque tincidunt malesuada; metus viverra tellus. Dignissim euismod dui tortor tortor nostra euismod ac nisi. Elit nisl gravida eget sollicitudin arcu ex. Arcu tortor tempus potenti rhoncus sollicitudin porttitor justo.",
-  "Lorem ipsum odor amet, consectetuer adipiscing elit. Fermentum nulla ad semper finibus bibendum. Volutpat ultricies metus per massa lobortis massa magna risus. Quisque pellentesque tincidunt malesuada; metus viverra tellus. Dignissim euismod dui tortor tortor nostra euismod ac nisi. Elit nisl gravida eget sollicitudin arcu ex. Arcu tortor tempus potenti rhoncus sollicitudin porttitor justo.",
-  "Lorem ipsum odor amet, consectetuer adipiscing elit. Fermentum nulla ad semper finibus bibendum. Volutpat ultricies metus per massa lobortis massa magna risus. Quisque pellentesque tincidunt malesuada; metus viverra tellus. Dignissim euismod dui tortor tortor nostra euismod ac nisi. Elit nisl gravida eget sollicitudin arcu ex. Arcu tortor tempus potenti rhoncus sollicitudin porttitor justo.",
-];
-
 export const loader = ({ request }: LoaderFunctionArgs) => {
   const { searchParams } = new URL(request.url);
   const n = searchParams.get("n") || 1;
-  return json({ n, paragraphs: DEFAULT_PARAGRAPHS });
+  return json({ n, paragraphs: generateLoremIpsum(n) });
 };
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const n = formData.get("n");
-  // TODO: Make this a function call that accepts `n` and returns `n` number of
-  // lorem ipsum paragraphs.
-  const paragraphs = ["Lorem ipsum", "sit amet"];
+  const paragraphs = generateLoremIpsum(n);
   return json({ paragraphs });
 };
 
 const Index = () => {
+  const ref = useRef(null);
+  const navigation = useNavigation();
   const { n, paragraphs } = useLoaderData<typeof loader>();
 
   const handleCopy = () => {
-    // TODO: Toast promise looks cool.
-    const promise = () =>
-      new Promise((resolve) =>
-        setTimeout(() => resolve({ name: "Sonner" }), 2000)
-      );
-
-    toast.promise(promise, {
-      loading: "Loading...",
-      success: (data) => {
-        return "Copied to clipboard.";
-      },
-      error: "Error",
-    });
+    if (!ref.current) return;
+    navigator.clipboard.writeText(ref.current.innerHTML);
+    toast.success("Copied to clipboard.");
   };
 
   useEffect(() => {
-    // TODO: Is this working?
-    toast.success("Copied to clipboard.");
-  }, []);
+    handleCopy();
+  }, [n]);
 
   return (
     <main className="max-w-6xl mx-auto text-lg px-8 flex flex-col h-screen">
@@ -95,7 +75,7 @@ const Index = () => {
       <section className="max-w-4xl mx-auto flex flex-col justify-center h-[calc(100%-5rem)]">
         <div className="space-y-6 bg-zinc-100 dark:bg-zinc-900 p-8 pt-16 rounded-md relative overflow-auto">
           <div className="flex absolute top-8 left-0 px-8 justify-between w-full">
-            <Form method="POST" className="flex justify-between">
+            <Form role="search" className="flex justify-between">
               <div className="flex gap-2">
                 <input
                   required
@@ -110,14 +90,20 @@ const Index = () => {
                 <Button style="primary">Generate</Button>
               </div>
             </Form>
-            <Button style="secondary" onClick={handleCopy}>
+            <Button
+              style="secondary"
+              disabled={navigation.state === "loading"}
+              onClick={handleCopy}
+            >
               Copy
             </Button>
           </div>
 
-          {paragraphs.map((paragraph, index) => (
-            <p key={index}>{paragraph}</p>
-          ))}
+          <div ref={ref} className="space-y-6">
+            {paragraphs.map((paragraph, index) => (
+              <p key={index}>{paragraph}</p>
+            ))}
+          </div>
         </div>
       </section>
     </main>
