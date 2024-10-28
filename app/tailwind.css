@@ -1,12 +1,30 @@
+/* TODO: Check for the usages of dark: classes and replace them with the variables approach. */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-html,
 body {
+  color: var(--foreground);
+  background: var(--background);
+}
+
+@layer base {
+  :root {
+    --background: 18, 18, 18;
+    --foreground: 255, 255, 255;
+    --primary-background: 18, 18, 18;
+    --secondary-background: 244 244 245;
+  }
+
   @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-    color: "#fff";
-    background: "#000";
+    :root {
+      color-scheme: dark;
+
+      --background: 255, 255, 255;
+      --foreground: 0, 0, 0;
+      --primary-background: 18, 18, 18;
+      --secondary-background: 24 24 27;
+    }
   }
 }
