@@ -1,5 +1,3 @@
-// TODO: Update the favicon.
-// TODO: Copy the content by default.
 import type {
   ActionFunctionArgs,
   LoaderFunctionArgs,
@@ -42,8 +40,6 @@ export const action = async ({ request }: ActionFunctionArgs) => {
   const paragraphs = ["Lorem ipsum", "sit amet"];
   return json({ paragraphs });
 };
-
-// TODO: Small scrollbar looks like a bad UI. Let's show the full scrollbar.
 
 const Index = () => {
   const { n, paragraphs } = useLoaderData<typeof loader>();

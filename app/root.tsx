@@ -34,8 +34,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
-        {/* TODO: Enable this back */}
-        {/* <Copyright /> */}
         <Toaster />
         <ScrollRestoration />
         <Scripts />
