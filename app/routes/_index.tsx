@@ -8,11 +8,32 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 import Button from "~/components/button";
 
-// TODO: Update the meta information.
 export const meta: MetaFunction = () => {
   return [
     { title: "Lorem ipsum generator" },
-    { name: "description", content: "" },
+    {
+      name: "description",
+      content:
+        "Generate lorem ipsum text for your website by specifying the number of paragraphs.",
+    },
+    { name: "keywords", content: "lorem ipsum generator, remix-run" },
+    { property: "og:title", content: "Lorem ipsum generator" },
+    {
+      property: "og:description",
+      content:
+        "Generate lorem ipsum text for your website by specifying the number of paragraphs.",
+    },
+    { property: "og:image", content: "TODO: Add the image here" },
+    { property: "twitter:title", content: "Lorem ipsum generator" },
+    {
+      property: "twitter:description",
+      content:
+        "Generate lorem ipsum text for your website by specifying the number of paragraphs.",
+    },
+    { property: "twitter:creator:id", content: "@abhayvashokan" },
+    { property: "twitter:site", content: "@abhayvashokan" },
+    { property: "twitter:image", content: "TODO: Add the image here" },
+    { property: "twitter:card", content: "summary_large_image" },
   ];
 };
 
